@@ -57,8 +57,7 @@ while inGame:
             if event.key == pygame.K_d:
                 player.right = False
             if event.key == pygame.K_w:
-                if not player.jumpTimer < 20:
-                    player.jumpTimer = 20
+                player.jumpTimer = 0
                 player.up = False
     if player.left:
         player.x -= player.defaultPlayerSpeed
@@ -67,7 +66,7 @@ while inGame:
     if player.up and not player.jumping:
         player.y -= player.defaultJumpHeight
         player.jumpTimer -= 1
-        if player.jumpTimer == 0:
+        if player.jumpTimer <= 0:
             player.jumping = True
             player.jumpTimer = 20
     for block in groundBlocks:
