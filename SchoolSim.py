@@ -25,7 +25,6 @@ lightBlue = 230, 230, 250
 #Pseudocode - Player object (X coord, Y coord, Height, Width)
 player = Player(10,10,100,50)
 
-
 while inGame:
     '''Event Handler'''
     for event in pygame.event.get():
