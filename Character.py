@@ -25,6 +25,8 @@ class Character(sprite.Sprite):
         self.fallSpeed = fallSpeed
         self.maxFallSpeed = maxFallSpeed
         self.screen = screen
+        self.defaultPlayerSpeed = 8
+        self.defaultJumpHeight = 20
 
     def moveRight(self):
         self.right = True

@@ -44,11 +44,11 @@ while inGame:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
     if player.left:
-        player.x -= player.speed
+        player.x -= player.defaultPlayerSpeed
     if player.right:
-        player.x += player.speed
+        player.x += player.defaultPlayerSpeed
     if player.up:
-        player.y += player.speed
+        player.y -= player.defaultJumpHeight
     for block in groundBlocks:
         if player.y + player.height >= block.y:
             player.y -= player.fallSpeed
