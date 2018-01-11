@@ -42,3 +42,4 @@ class Character(sprite.Sprite):
     def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen,self.color,rectangle,0)
+
