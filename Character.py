@@ -3,7 +3,7 @@
  Aidan Parkhurst
  Nadil Ranatunga
  Jake Valencia
- stuff"""
+ stuff."""
 
 from pygame import *
 
