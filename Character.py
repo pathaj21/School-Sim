@@ -9,7 +9,7 @@ import pygame
 from pygame import *
 
 class Character(sprite.Sprite):
-    def __init__(self, color, x, y, height, width, screen):
+    def __init__(self, color, x, y, height, width, fallSpeed, maxFallSpeed, screen):
         pygame.sprite.Sprite.__init__(self)
         self.color = color
         self.height = height
@@ -22,6 +22,8 @@ class Character(sprite.Sprite):
         self.left = False
         self.right = False
         self.up = False
+        self.fallSpeed = fallSpeed
+        self.maxFallSpeed = maxFallSpeed
         self.screen = screen
 
     def moveRight(self):
@@ -33,7 +35,7 @@ class Character(sprite.Sprite):
     def moveUp(self):
         self.up = True
 
-    def screenDraw(self):
+    def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen,self.color,rectangle,0)
 
