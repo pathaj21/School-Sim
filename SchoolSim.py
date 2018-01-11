@@ -6,7 +6,7 @@
 
 import pygame
 import sys
-
+from Character import *
 '''Main - Controls Base Game'''
 #Currently mostly pseudocode until Player class is finished #
 
@@ -22,9 +22,10 @@ screen = pygame.display.set_mode(winSize)
 white = 255, 255, 255
 black = 0, 0, 0
 lightBlue = 230, 230, 250
+red = 255, 0, 0
 #Objects
 #Pseudocode - Player object (X coord, Y coord, Height, Width)
-player = character(10,10,100,50)
+player = Character(red,10,10,100,50)
 
 while inGame:
     '''Event Handler'''
@@ -37,8 +38,8 @@ while inGame:
         player.x += player.speed
     if player.up:
         player.y += player.speed
-    if not player.isOnGround:
-        player.y -= 5
+    #if not player.isOnGround:
+    player.y -= 5
 
     '''Draw'''
     screen.fill(lightBlue)

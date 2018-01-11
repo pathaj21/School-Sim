@@ -5,11 +5,12 @@
  Jake Valencia
  stuff."""
 
+import pygame
 from pygame import *
 
 
 class Character(sprite.Sprite):
-    def __init__(self, color, height, width, x, y, left, right, up):
+    def __init__(self, color, x, y, height, width):
         pygame.sprite.Sprite.__init__(self)
         self.color = color
         self.height = height
@@ -19,20 +20,17 @@ class Character(sprite.Sprite):
         self.image = Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
-        self.left = left
-        self.right = right
-        self.up = up
+        self.left = False
+        self.right = False
+        self.up = False
 
     def moveRight(self):
-        self.x += 1
         self.right = True
 
     def moveLeft(self):
-        self.x -= 1
         self.left = True
 
     def moveUp(self):
-        self.y += 8
         self.up = True
 
     def keyPressing(self):
