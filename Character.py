@@ -2,7 +2,8 @@
  Patrick Hajdukiewicz
  Aidan Parkhurst
  Nadil Ranatunga
- Jake Valencia"""
+ Jake Valencia
+ stuff"""
 
 from pygame import *
 
@@ -36,3 +37,4 @@ class Character(sprite.Sprite):
 
     def keyPressing(self):
         key.get_focused()
+
