@@ -18,16 +18,19 @@ pygame.init()
 defaultFallSpeed = 3
 inGame = True
 clock = pygame.time.Clock()
+
 #Window Size
 winSize = winHeight, winWidth, = 800, 600
 screen = pygame.display.set_mode(winSize)
 pygame.display.set_caption("School Platformer!")
+
 #Colors
 white = 255, 255, 255
 black = 0, 0, 0
 lightBlue = 230, 230, 250
 red = 255, 0, 0
 lightGray = 169, 169, 169
+
 #Objects
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
