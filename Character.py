@@ -7,10 +7,9 @@
 
 import pygame
 from pygame import *
-import SchoolSim
 
 class Character(sprite.Sprite):
-    def __init__(self, color, x, y, height, width):
+    def __init__(self, color, x, y, height, width, screen):
         pygame.sprite.Sprite.__init__(self)
         self.color = color
         self.height = height
@@ -23,6 +22,7 @@ class Character(sprite.Sprite):
         self.left = False
         self.right = False
         self.up = False
+        self.screen = screen
 
     def moveRight(self):
         self.right = True
@@ -34,8 +34,8 @@ class Character(sprite.Sprite):
         self.up = True
 
     def screenDraw(self):
-        rectangle = Rect(self.x, self.y, self.width, self.height)
-        draw.rect(Surface=SchoolSim.screen, color=self.color, Rect=rectangle, width=0)
+        rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(self.screen,self.color,rectangle,0)
 
     def keyPressing(self):
         key.get_focused()

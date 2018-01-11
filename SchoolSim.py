@@ -6,7 +6,8 @@
 
 import pygame
 import sys
-from Character import *
+from Character import Character
+
 '''Main - Controls Base Game'''
 #Currently mostly pseudocode until Player class is finished #
 
@@ -15,6 +16,7 @@ pygame.init()
 
 '''Global Variables'''
 inGame = True
+clock = pygame.time.Clock()
 #Window Size
 winSize = winHeight, winWidth, = 300, 200
 screen = pygame.display.set_mode(winSize)
@@ -25,7 +27,7 @@ lightBlue = 230, 230, 250
 red = 255, 0, 0
 #Objects
 #Pseudocode - Player object (X coord, Y coord, Height, Width)
-player = Character(red,10,10,100,50)
+player = Character(red,10,10,100,50,screen)
 
 while inGame:
     '''Event Handler'''
@@ -39,8 +41,11 @@ while inGame:
     if player.up:
         player.y += player.speed
     #if not player.isOnGround:
-    player.y -= 5
-
+    player.y = 5
     '''Draw'''
     screen.fill(lightBlue)
+    player.screenDraw()
     pygame.display.flip()
+    xd = 1000//60
+    pygame.time.wait(xd)
+    clock.tick()
