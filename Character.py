@@ -11,6 +11,7 @@ from pygame import *
 class Character(sprite.Sprite):
     def __init__(self, color, x, y, height, width, fallSpeed, maxFallSpeed, screen):
         pygame.sprite.Sprite.__init__(self)
+        self.jumping = False
         self.color = color
         self.height = height
         self.width = width
@@ -27,6 +28,7 @@ class Character(sprite.Sprite):
         self.screen = screen
         self.defaultPlayerSpeed = 8
         self.defaultJumpHeight = 20
+        self.jumpTimer = 20
 
     def moveRight(self):
         self.right = True
@@ -40,6 +42,3 @@ class Character(sprite.Sprite):
     def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen,self.color,rectangle,0)
-
-    def keyPressing(self):
-        key.get_focused()

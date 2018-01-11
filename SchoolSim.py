@@ -43,14 +43,37 @@ while inGame:
     '''Event Handler'''
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_a:
+                player.left = True
+            if event.key == pygame.K_d:
+                player.right = True
+            if event.key == pygame.K_w:
+                if not player.jumping:
+                    player.up = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+                player.left = False
+            if event.key == pygame.K_d:
+                player.right = False
+            if event.key == pygame.K_w:
+                if not player.jumpTimer < 20:
+                    player.jumpTimer = 20
+                player.up = False
     if player.left:
         player.x -= player.defaultPlayerSpeed
     if player.right:
         player.x += player.defaultPlayerSpeed
-    if player.up:
+    if player.up and not player.jumping:
         player.y -= player.defaultJumpHeight
+        player.jumpTimer -= 1
+        if player.jumpTimer == 0:
+            player.jumping = True
+            player.jumpTimer = 20
     for block in groundBlocks:
         if player.y + player.height >= block.y:
+            player.jumping = False
+            player.jumpTimer = 20
             player.y -= player.fallSpeed
             player.fallSpeed = defaultFallSpeed
         else:
