@@ -12,6 +12,9 @@ from Block import Block
 '''Main - Controls Base Game'''
 '''Start Pygame'''
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("Resources/8BitGR.ogg")
+pygame.mixer.music.play(loops=-1, start=0.0)
 
 '''Global Variables'''
 #Misc
