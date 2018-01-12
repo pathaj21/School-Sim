@@ -18,12 +18,12 @@ pygame.mixer.music.play(loops=-1, start=0.0)
 
 '''Global Variables'''
 #Misc
-defaultFallSpeed = 3
+defaultFallSpeed = 8
 inGame = True
 clock = pygame.time.Clock()
 
 #Window Size
-winSize = winHeight, winWidth, = 800, 600
+winSize = winWidth, winHeight, = 800, 600
 screen = pygame.display.set_mode(winSize)
 pygame.display.set_caption("School Platformer!")
 
@@ -37,10 +37,13 @@ lightGray = 169, 169, 169
 #Objects
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
+miscBlocks = pygame.sprite.Group()
 player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 10, screen)
-groundBlock = Block(lightGray, 0, winHeight - 225, 25, 800, screen)
+groundBlock = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
+block1 = Block(lightGray, 100, 450, 25, 100, screen)
 playerGroup.add(player)
-groundBlocks.add(groundBlock)
+groundBlocks.add(groundBlock,block1)
+
 
 while inGame:
     '''Event Handler'''
@@ -61,11 +64,16 @@ while inGame:
                 player.right = False
             if event.key == pygame.K_w:
                 player.jumpTimer = 0
+                player.jumping = False
                 player.up = False
     if player.left:
         player.x -= player.defaultPlayerSpeed
+        if player.x <= 0:
+            player.x = 0
     if player.right:
         player.x += player.defaultPlayerSpeed
+        if player.x >= winWidth - player.width:
+            player.x = winWidth - player.width
     if player.up and not player.jumping:
         player.y -= player.defaultJumpHeight
         player.jumpTimer -= 1
@@ -73,18 +81,15 @@ while inGame:
             player.jumping = True
             player.jumpTimer = 20
     for block in groundBlocks:
-        if player.y + player.height >= block.y:
-            player.jumping = False
-            player.jumpTimer = 20
-            player.y -= player.fallSpeed
-            player.fallSpeed = defaultFallSpeed
-        else:
-            if player.fallSpeed <= player.maxFallSpeed:
-                player.fallSpeed += 1
+        if player.x + player.width >= block.x and player.x <= block.x + block.width:
+            if player.y + player.height >= block.y and player.y <= block.y:
+                player.jumpTimer = 20
+                player.y -= player.fallSpeed
     player.y += player.fallSpeed
     '''Draw'''
     screen.fill(lightBlue)
     groundBlocks.update()
+    miscBlocks.update()
     playerGroup.update()
     pygame.display.flip()
     xd = 1000//60

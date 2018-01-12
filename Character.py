@@ -28,7 +28,7 @@ class Character(sprite.Sprite):
         self.screen = screen
         self.defaultPlayerSpeed = 8
         self.defaultJumpHeight = 20
-        self.jumpTimer = 20
+        self.jumpTimer = 0
 
     def moveRight(self):
         self.right = True
