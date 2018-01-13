@@ -65,19 +65,20 @@ class Character(sprite.Sprite):
             return False
         return False
 
-    def sideHit(self,block):
+    def rightHit(self,block):
         if block.contains(self.x + self.width, self.y + .5* self.height) \
-                and (block.contains(self.x + self.width, self.y)
-                or block.contains(self.x + self.width, self.y + self.height)):
-            self.limitRight = True
+                and (block.contains(self.x + self.width, self.y) or block.contains(self.x + self.width, self.y + self.height)):
+            return True
         else:
-            self.limitRight = False
+            return False
+
+    def leftHit(self,block):
         if block.contains(self.x, self.y + .5* self.height) \
-                and (block.contains(self.x,self.y)
-                or block.contains(self.x, self.y + self.height)):
-            self.limitLeft = True
+                and (block.contains(self.x,self.y) or block.contains(self.x, self.y + self.height)):
+            return True
         else:
-            self.limitLeft = False
+            return False
+
     def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen,self.color,rectangle,0)

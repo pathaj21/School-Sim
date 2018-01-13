@@ -43,9 +43,11 @@ groundBlocks = pygame.sprite.Group()
 miscBlocks = pygame.sprite.Group()
 player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 16, screen)
 groundBlock = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
-block1 = Block(lightGray, 100, 400, 400, 100, screen)
+block1 = Block(lightGray, 100, 500, 1000, 100, screen)
+block2 = Block(lightGray, 300, 400, 1000, 100, screen)
+block3 = Block(lightGray, 500, 300, 1000, 100, screen)
 playerGroup.add(player)
-groundBlocks.add(groundBlock,block1)
+groundBlocks.add(groundBlock,block1,block2,block3)
 
 while inGame:
     '''Event Handler'''
@@ -70,11 +72,17 @@ while inGame:
     if player.left:
         if not player.limitLeft:
             player.x -= player.defaultPlayerSpeed
+        else:
+            player.x += 2
+            player.limitLeft = False
         if player.x <= 0:
             player.x = 0
     if player.right:
         if not player.limitRight:
             player.x += player.defaultPlayerSpeed
+        else:
+            player.x -= 2
+            player.limitRight = False
         if player.x >= winWidth - player.width:
             player.x = winWidth - player.width
     if player.up and not player.jumping:
@@ -89,7 +97,10 @@ while inGame:
         if player.fallSpeed < player.maxFallSpeed:
             player.fallSpeed += 1
     for block in groundBlocks:
-        player.sideHit(block)
+        if player.leftHit(block):
+            player.limitLeft = True
+        if player.rightHit(block):
+            player.limitRight = True
         if not player.onGround(block):
             player.down = True
         else:
