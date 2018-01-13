@@ -20,6 +20,13 @@ class Block(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.screen = screen
 
+    def contains(self,x,y):
+        if x >= self.x and x <= self.x + self.width:
+            if y >= self.y and y <= self.y + self.height:
+                return True
+            return False
+        return False
+
     def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen, self.color, rectangle, 0)

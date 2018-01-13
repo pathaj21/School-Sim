@@ -15,12 +15,15 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load("Resources/8BitGR.ogg")
 pygame.mixer.music.play(loops=-1, start=0.0)
+pygame.mixer.music.set_volume(0.2)
 
 '''Global Variables'''
 #Misc
 defaultFallSpeed = 8
+defaultJumpTimer = 22
 inGame = True
 clock = pygame.time.Clock()
+
 
 #Window Size
 winSize = winWidth, winHeight, = 800, 600
@@ -38,12 +41,11 @@ lightGray = 169, 169, 169
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
 miscBlocks = pygame.sprite.Group()
-player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 10, screen)
+player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 16, screen)
 groundBlock = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
-block1 = Block(lightGray, 100, 450, 25, 100, screen)
+block1 = Block(lightGray, 100, 400, 400, 100, screen)
 playerGroup.add(player)
 groundBlocks.add(groundBlock,block1)
-
 
 while inGame:
     '''Event Handler'''
@@ -55,37 +57,49 @@ while inGame:
             if event.key == pygame.K_d:
                 player.right = True
             if event.key == pygame.K_w:
-                if not player.jumping:
-                    player.up = True
+                player.up = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 player.left = False
             if event.key == pygame.K_d:
                 player.right = False
             if event.key == pygame.K_w:
-                player.jumpTimer = 0
-                player.jumping = False
                 player.up = False
+                player.jumpTimer = 0
+                player.fallSpeed = defaultFallSpeed
     if player.left:
-        player.x -= player.defaultPlayerSpeed
+        if not player.limitLeft:
+            player.x -= player.defaultPlayerSpeed
         if player.x <= 0:
             player.x = 0
     if player.right:
-        player.x += player.defaultPlayerSpeed
+        if not player.limitRight:
+            player.x += player.defaultPlayerSpeed
         if player.x >= winWidth - player.width:
             player.x = winWidth - player.width
     if player.up and not player.jumping:
-        player.y -= player.defaultJumpHeight
-        player.jumpTimer -= 1
+        player.y -= player.jumpHeight + player.jumpTimer
         if player.jumpTimer <= 0:
             player.jumping = True
-            player.jumpTimer = 20
+            player.jumpTimer = defaultJumpTimer
+        else:
+            player.jumpTimer -= 1
+    if player.down:
+        player.y += player.fallSpeed
+        if player.fallSpeed < player.maxFallSpeed:
+            player.fallSpeed += 1
     for block in groundBlocks:
-        if player.x + player.width >= block.x and player.x <= block.x + block.width:
-            if player.y + player.height >= block.y and player.y <= block.y:
-                player.jumpTimer = 20
-                player.y -= player.fallSpeed
-    player.y += player.fallSpeed
+        player.sideHit(block)
+        if not player.onGround(block):
+            player.down = True
+        else:
+            player.jumping = False
+            player.jumpTimer = defaultJumpTimer
+            player.fallSpeed = defaultFallSpeed
+        if player.headHit(block):
+            player.jumpTimer = 0
+            player.down = True
+            player.fallSpeed = defaultFallSpeed
     '''Draw'''
     screen.fill(lightBlue)
     groundBlocks.update()
