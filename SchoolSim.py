@@ -8,12 +8,13 @@ import pygame
 import sys
 from Character import Character
 from Block import Block
+from Spike import *
 
 '''Main - Controls Base Game'''
 '''Start Pygame'''
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.music.load("Resources/8BitGR.ogg")
+pygame.mixer.music.load("Resources/ChillBeats.ogg")
 pygame.mixer.music.play(loops=-1, start=0.0)
 pygame.mixer.music.set_volume(0.2)
 
@@ -41,11 +42,13 @@ lightGray = 169, 169, 169
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
 miscBlocks = pygame.sprite.Group()
+spikeBlocks = pygame.sprite.Group()
 player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 16, screen)
 groundBlock = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
 block1 = Block(lightGray, 100, 500, 1000, 100, screen)
 block2 = Block(lightGray, 300, 400, 1000, 100, screen)
 block3 = Block(lightGray, 500, 300, 1000, 100, screen)
+spike1 = Spikes(lightGray, 100, 500, 125, 475, 150, 500, screen)
 playerGroup.add(player)
 groundBlocks.add(groundBlock,block1,block2,block3)
 
@@ -116,6 +119,7 @@ while inGame:
     groundBlocks.update()
     miscBlocks.update()
     playerGroup.update()
+    spike1.update()
     pygame.display.flip()
     xd = 1000//60
     pygame.time.wait(xd)
