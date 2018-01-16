@@ -8,6 +8,7 @@ import pygame
 import sys
 from Character import Character
 from Block import Block
+from Level import Level
 
 '''Main - Controls Base Game'''
 '''Start Pygame'''
@@ -23,7 +24,8 @@ defaultFallSpeed = 8
 defaultJumpTimer = 22
 inGame = True
 clock = pygame.time.Clock()
-
+levelList = []
+curLev = 0
 
 #Window Size
 winSize = winWidth, winHeight, = 800, 600
@@ -40,17 +42,23 @@ lightGray = 169, 169, 169
 #Objects
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
-miscBlocks = pygame.sprite.Group()
-player = Character(red, 10, 10, 100, 50, defaultFallSpeed, 16, screen)
-groundBlock = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
-block1 = Block(lightGray, 100, 500, 1000, 100, screen)
-block2 = Block(lightGray, 300, 400, 1000, 100, screen)
-block3 = Block(lightGray, 500, 300, 1000, 100, screen)
+player = Character(red, 10, 10, 50, 25, defaultFallSpeed, 16, screen)
+groundBlock1 = Block(lightGray, 0, winHeight - 25, 25, 300, screen)
+groundBlock2 = Block(lightGray, 550, winHeight - 25, 25, 300, screen)
 playerGroup.add(player)
-groundBlocks.add(groundBlock,block1,block2,block3)
+groundBlocks.add(groundBlock1,groundBlock2)
+level1 = Level(groundBlocks)
+levelList.append(level1)
+
+groundBlocks2 = pygame.sprite.Group()
+groundBlock3 = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
+groundBlocks2.add(groundBlock3)
+level2 = Level(groundBlocks2)
+levelList.append(level2)
 
 while inGame:
     '''Event Handler'''
+    loadLevel = levelList[curLev]
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.KEYDOWN:
@@ -96,7 +104,7 @@ while inGame:
         player.y += player.fallSpeed
         if player.fallSpeed < player.maxFallSpeed:
             player.fallSpeed += 1
-    for block in groundBlocks:
+    for block in loadLevel.blocks:
         if player.leftHit(block):
             player.limitLeft = True
         if player.rightHit(block):
@@ -113,8 +121,7 @@ while inGame:
             player.fallSpeed = defaultFallSpeed
     '''Draw'''
     screen.fill(lightBlue)
-    groundBlocks.update()
-    miscBlocks.update()
+    loadLevel.blocks.update()
     playerGroup.update()
     pygame.display.flip()
     xd = 1000//60
