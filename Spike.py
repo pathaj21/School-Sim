@@ -3,7 +3,7 @@ from pygame import *
 from Character import Character
 from Block import Block
 
-
+""""""
 class Spikes(object):
     def __init__(self, color, x1, y1, x2, y2, x3, y3, screen):
         self.color = color
