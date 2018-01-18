@@ -6,9 +6,12 @@
 
 import pygame
 import sys
+import os
+import pygame
 from Character import Character
 from Block import Block
 from Level import Level
+from Spike import Spikes
 
 '''Main - Controls Base Game'''
 '''Start Pygame'''
@@ -29,6 +32,7 @@ curLev = 0
 
 #Window Size
 winSize = winWidth, winHeight, = 800, 600
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 screen = pygame.display.set_mode(winSize)
 pygame.display.set_caption("School Platformer!")
 
@@ -42,19 +46,32 @@ lightGray = 169, 169, 169
 #Objects
 playerGroup = pygame.sprite.Group()
 groundBlocks = pygame.sprite.Group()
+spikeGroup = pygame.sprite.Group()
 player = Character(red, 10, 10, 50, 25, defaultFallSpeed, 16, screen)
 groundBlock1 = Block(lightGray, 0, winHeight - 25, 25, 300, screen)
 groundBlock2 = Block(lightGray, 550, winHeight - 25, 25, 300, screen)
 playerGroup.add(player)
 groundBlocks.add(groundBlock1,groundBlock2)
-level1 = Level(groundBlocks)
+level1 = Level(groundBlocks,spikeGroup)
 levelList.append(level1)
 
+spikeGroup2 = pygame.sprite.Group()
+spike1 = Spikes(black, 100, winHeight - 25, 125, winHeight - 100, 150,winHeight - 25, screen)
 groundBlocks2 = pygame.sprite.Group()
 groundBlock3 = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
 groundBlocks2.add(groundBlock3)
-level2 = Level(groundBlocks2)
+spikeGroup2.add(spike1)
+level2 = Level(groundBlocks2,spikeGroup2)
 levelList.append(level2)
+
+spikeGroup3 = pygame.sprite.Group()
+spike2 = Spikes(black, 150, winHeight - 25, 175, winHeight - 100, 200,winHeight - 25, screen)
+groundBlocks3 = pygame.sprite.Group()
+groundBlock4 = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
+groundBlocks3.add(groundBlock3)
+spikeGroup3.add(spike2)
+level3 = Level(groundBlocks3,spikeGroup3)
+levelList.append(level3)
 
 while inGame:
     '''Event Handler'''
@@ -85,6 +102,10 @@ while inGame:
             player.limitLeft = False
         if player.x <= 0:
             player.x = 0
+            if curLev % 2 == 1 and curLev < (len(levelList) - 1):
+                curLev += 1
+                player.curSpawnX = 10
+                player.curSpawnY = 100
     if player.right:
         if not player.limitRight:
             player.x += player.defaultPlayerSpeed
@@ -93,6 +114,10 @@ while inGame:
             player.limitRight = False
         if player.x >= winWidth - player.width:
             player.x = winWidth - player.width
+            if curLev % 2 == 0 and curLev < (len(levelList) - 1):
+                curLev += 1
+                player.curSpawnX = winWidth - 10 - player.width
+                player.curSpawnY = 100
     if player.up and not player.jumping:
         player.y -= player.jumpHeight + player.jumpTimer
         if player.jumpTimer <= 0:
@@ -102,6 +127,8 @@ while inGame:
             player.jumpTimer -= 1
     if player.down:
         player.y += player.fallSpeed
+        if player.y + player.height >= winHeight:
+            player.die(player.curSpawnX,player.curSpawnY)
         if player.fallSpeed < player.maxFallSpeed:
             player.fallSpeed += 1
     for block in loadLevel.blocks:
@@ -119,9 +146,14 @@ while inGame:
             player.jumpTimer = 0
             player.down = True
             player.fallSpeed = defaultFallSpeed
+    for spike in loadLevel.spikes:
+        if player.spikeHit(spike):
+            player.jumpTimer = 0
+            player.down = True
+            player.fallSpeed = defaultFallSpeed
     '''Draw'''
     screen.fill(lightBlue)
-    loadLevel.blocks.update()
+    loadLevel.update()
     playerGroup.update()
     pygame.display.flip()
     xd = 1000//60

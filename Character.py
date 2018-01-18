@@ -16,6 +16,8 @@ class Character(sprite.Sprite):
         self.width = width
         self.x = x
         self.y = y
+        self.curSpawnX = 10
+        self.curSpawnY = 100
         self.image = Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
@@ -78,6 +80,21 @@ class Character(sprite.Sprite):
             return True
         else:
             return False
+
+    def spikeHit(self,spike):
+        if spike.contains(self.x + self.width, self.y + .5* self.height)\
+                or spike.contains(self.x, self.y + .5* self.height)\
+                or spike.contains(self.x,self.y)\
+                or spike.contains(self.x, self.y + self.height)\
+                or spike.contains(self.x + self.width,self.y)\
+                or spike.contains(self.x + self.width, self.y + self.height):
+            self.die(self.curSpawnX,self.curSpawnY)
+            return True
+        return False
+
+    def die(self,x,y):
+        self.x = x
+        self.y = y
 
     def update(self):
         rectangle = pygame.Rect(self.x, self.y, self.width, self.height)

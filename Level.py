@@ -9,8 +9,10 @@ import pygame
 
 class Level(object):
 
-    def __init__(self,blockGroup : pygame.sprite.Group):
+    def __init__(self,blockGroup : pygame.sprite.Group, spikeGroup : pygame.sprite.Group):
         self.blocks = blockGroup
+        self.spikes = spikeGroup
 
     def update(self):
         self.blocks.update()
+        self.spikes.update()
