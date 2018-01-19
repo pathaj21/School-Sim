@@ -96,11 +96,14 @@ levelList.append(lvl3)
 lvl4blocks = pygame.sprite.Group()
 lvl4spikes = pygame.sprite.Group()
 lvl4block1 = Block(lightGray,winWidth - 100,winHeight - 25,25,100,screen)
-lvl4blocks.add(lvl4block1)
+lvl4block2 = Block(lightGray,winWidth - 425,winHeight - 25,25,200,screen)
+lvl4spike1 = Spikes(black,winWidth - 275,winHeight - 25,winWidth - 250,winHeight - 50,winWidth - 225,winHeight - 25,screen)
+lvl4spike2 = Spikes(black,winWidth - 375,winHeight - 25,winWidth - 350,winHeight - 50,winWidth - 325,winHeight - 25,screen)
+lvl4blocks.add(lvl4block1,lvl4block2)
+lvl4spikes.add(lvl4spike1,lvl4spike2)
 lvl4 = Level(lvl4blocks,lvl4spikes,winWidth - player.width - 10, winHeight - 200)
 levelList.append(lvl4)
 
-curLev = 3
 while inGame:
     player.curSpawnX = levelList[curLev].spawnX
     player.curSpawnY = levelList[curLev].spawnY
