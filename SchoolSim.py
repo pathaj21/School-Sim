@@ -24,7 +24,7 @@ pygame.mixer.music.set_volume(0.2)
 '''Global Variables'''
 #Misc
 defaultFallSpeed = 8
-defaultJumpTimer = 22
+defaultJumpTimer = 15
 inGame = True
 clock = pygame.time.Clock()
 levelList = []
@@ -45,35 +45,65 @@ lightGray = 169, 169, 169
 
 #Objects
 playerGroup = pygame.sprite.Group()
-groundBlocks = pygame.sprite.Group()
-spikeGroup = pygame.sprite.Group()
-player = Character(red, 10, 10, 50, 25, defaultFallSpeed, 16, screen)
-groundBlock1 = Block(lightGray, 0, winHeight - 25, 25, 300, screen)
-groundBlock2 = Block(lightGray, 550, winHeight - 25, 25, 300, screen)
+player = Character(red,10,100,50,25,defaultFallSpeed,12,screen)
 playerGroup.add(player)
-groundBlocks.add(groundBlock1,groundBlock2)
-level1 = Level(groundBlocks,spikeGroup)
-levelList.append(level1)
 
-spikeGroup2 = pygame.sprite.Group()
-spike1 = Spikes(black, 100, winHeight - 25, 125, winHeight - 100, 150,winHeight - 25, screen)
-groundBlocks2 = pygame.sprite.Group()
-groundBlock3 = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
-groundBlocks2.add(groundBlock3)
-spikeGroup2.add(spike1)
-level2 = Level(groundBlocks2,spikeGroup2)
-levelList.append(level2)
+'''Levels'''
+#Level 1
+lvl1blocks = pygame.sprite.Group()
+lvl1spikes = pygame.sprite.Group()
+lvl1block1 = Block(lightGray,0,winHeight - 100,100,100,screen)
+lvl1block2 = Block(lightGray,200,winHeight-180,100,100,screen)
+lvl1block3 = Block(lightGray,400,winHeight-280,100,100,screen)
+lvl1block4 = Block(lightGray,600,winHeight-380,100,100,screen)
+lvl1blocks.add(lvl1block1,lvl1block2,lvl1block3,lvl1block4)
+lvl1 = Level(lvl1blocks,lvl1spikes,10,winHeight - 300)
+levelList.append(lvl1)
 
-spikeGroup3 = pygame.sprite.Group()
-spike2 = Spikes(black, 150, winHeight - 25, 175, winHeight - 100, 200,winHeight - 25, screen)
-groundBlocks3 = pygame.sprite.Group()
-groundBlock4 = Block(lightGray, 0, winHeight - 25, 25, 800, screen)
-groundBlocks3.add(groundBlock3)
-spikeGroup3.add(spike2)
-level3 = Level(groundBlocks3,spikeGroup3)
-levelList.append(level3)
+#Level 2
+lvl2blocks = pygame.sprite.Group()
+lvl2spikes = pygame.sprite.Group()
+lvl2block1 = Block(lightGray,winWidth - 300,winHeight - 50,50,300,screen)
+lvl2block2 = Block(lightGray,winWidth - 550,winHeight - 50,50,100,screen)
+lvl2block3 = Block(lightGray,0,winHeight - 50,50,50,screen)
+lvl2blocks.add(lvl2block1,lvl2block2,lvl2block3)
+lvl2spike1 = Spikes(black,winWidth - 200,winHeight - 50,winWidth - 175,winHeight - 125,winWidth - 150,winHeight - 50, screen)
+lvl2spikes.add(lvl2spike1)
+lvl2 = Level(lvl2blocks,lvl2spikes, winWidth - player.width - 10, winHeight - 200)
+levelList.append(lvl2)
 
+#Level 3
+lvl3blocks = pygame.sprite.Group()
+lvl3spikes = pygame.sprite.Group()
+lvl3block1 = Block(lightGray,0,winHeight - 50,60,100,screen)
+lvl3block2 = Block(lightGray,200,winHeight - 100,50,90,screen)
+lvl3block3 = Block(lightGray,350,winHeight - 500,350,25,screen)
+lvl3block4 = Block(lightGray,525,winHeight - 80,50,200,screen)
+lvl3block5 = Block(lightGray,winWidth - 25,200,winHeight,25,screen)
+lvl3block6 = Block(lightGray,winWidth - 350,175,25,350,screen)
+lvl3block7 = Block(lightGray,winWidth - 100,400,25,100,screen)
+lvl3block8 = Block(lightGray,winWidth - 300,300,25,100,screen)
+lvl3block9 = Block(lightGray,375,275,175,20,screen)
+lvl3spike1 = Spikes(black,200,winHeight - 100,225,winHeight-125,250,winHeight-100,screen)
+lvl3spike2 = Spikes(black,600,winHeight-80,625,winHeight - 150,650,winHeight - 80,screen)
+lvl3spike3 = Spikes(black,winWidth - 275,175,winWidth - 250,115,winWidth - 225,175,screen)
+lvl3blocks.add(lvl3block1,lvl3block2,lvl3block3,lvl3block4,lvl3block5,lvl3block6,lvl3block7,lvl3block8,lvl3block9)
+lvl3spikes.add(lvl3spike1,lvl3spike2,lvl3spike3)
+lvl3 = Level(lvl3blocks,lvl3spikes,10,winHeight - 300)
+levelList.append(lvl3)
+
+#Level 4
+lvl4blocks = pygame.sprite.Group()
+lvl4spikes = pygame.sprite.Group()
+lvl4block1 = Block(lightGray,winWidth - 100,winHeight - 25,25,100,screen)
+lvl4blocks.add(lvl4block1)
+lvl4 = Level(lvl4blocks,lvl4spikes,winWidth - player.width - 10, winHeight - 200)
+levelList.append(lvl4)
+
+curLev = 3
 while inGame:
+    player.curSpawnX = levelList[curLev].spawnX
+    player.curSpawnY = levelList[curLev].spawnY
     '''Event Handler'''
     loadLevel = levelList[curLev]
     for event in pygame.event.get():
@@ -104,8 +134,6 @@ while inGame:
             player.x = 0
             if curLev % 2 == 1 and curLev < (len(levelList) - 1):
                 curLev += 1
-                player.curSpawnX = 10
-                player.curSpawnY = 100
     if player.right:
         if not player.limitRight:
             player.x += player.defaultPlayerSpeed
@@ -116,8 +144,6 @@ while inGame:
             player.x = winWidth - player.width
             if curLev % 2 == 0 and curLev < (len(levelList) - 1):
                 curLev += 1
-                player.curSpawnX = winWidth - 10 - player.width
-                player.curSpawnY = 100
     if player.up and not player.jumping:
         player.y -= player.jumpHeight + player.jumpTimer
         if player.jumpTimer <= 0:

@@ -26,7 +26,7 @@ class Character(sprite.Sprite):
         self.right = False
         self.up = False
         self.jumping = True
-        self.jumpTimer = 20
+        self.jumpTimer = 15
         self.fallSpeed = fallSpeed
         self.maxFallSpeed = maxFallSpeed
         self.screen = screen
